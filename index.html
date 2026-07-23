@@ -1,10 +1,67 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-TW" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>日期計算器 📅</title>
+  <title>極致日期計算器 📅 | Date Calculator Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <style>
+    :root {
+      /* Sleek Dark Mode (Default) */
+      --bg-color: #090816;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(255, 255, 255, 0.15);
+      --text-color: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.65);
+      --input-bg: rgba(255, 255, 255, 0.07);
+      --input-border: rgba(255, 255, 255, 0.15);
+      --input-hover-bg: rgba(255, 255, 255, 0.12);
+      --input-focus-border: #ff6fd8;
+      --input-focus-shadow: rgba(255, 111, 216, 0.35);
+      --tab-bg: rgba(0, 0, 0, 0.25);
+      --tab-active-bg: rgba(255, 255, 255, 0.12);
+      --btn-primary-bg: linear-gradient(135deg, #ff6fd8 0%, #3813c2 100%);
+      --btn-shadow: rgba(255, 111, 216, 0.3);
+      --badge-bg: rgba(255, 255, 255, 0.1);
+      --badge-border: rgba(255, 255, 255, 0.15);
+      --timeline-bg: rgba(0, 0, 0, 0.2);
+      --result-bg: rgba(255, 255, 255, 0.06);
+      --result-border: rgba(255, 255, 255, 0.12);
+      --title-gradient: linear-gradient(135deg, #ffffff 30%, #ffc5f4 70%, #9be2ff 100%);
+      --glow-opacity: 0.4;
+      --scrollbar-thumb: rgba(255, 255, 255, 0.2);
+      --shortcut-hover-bg: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="light"] {
+      /* Sleek Aurora Light Mode */
+      --bg-color: #f3f4f9;
+      --card-bg: rgba(255, 255, 255, 0.7);
+      --card-border: rgba(0, 0, 0, 0.08);
+      --text-color: #1e1b4b;
+      --text-muted: rgba(30, 27, 75, 0.6);
+      --input-bg: rgba(255, 255, 255, 0.8);
+      --input-border: rgba(0, 0, 0, 0.12);
+      --input-hover-bg: rgba(255, 255, 255, 0.95);
+      --input-focus-border: #6366f1;
+      --input-focus-shadow: rgba(99, 102, 241, 0.25);
+      --tab-bg: rgba(0, 0, 0, 0.05);
+      --tab-active-bg: rgba(255, 255, 255, 0.85);
+      --btn-primary-bg: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+      --btn-shadow: rgba(99, 102, 241, 0.25);
+      --badge-bg: rgba(0, 0, 0, 0.05);
+      --badge-border: rgba(0, 0, 0, 0.08);
+      --timeline-bg: rgba(0, 0, 0, 0.04);
+      --result-bg: rgba(0, 0, 0, 0.02);
+      --result-border: rgba(0, 0, 0, 0.06);
+      --title-gradient: linear-gradient(135deg, #1e1b4b 10%, #4f46e5 60%, #7c3aed 100%);
+      --glow-opacity: 0.15;
+      --scrollbar-thumb: rgba(0, 0, 0, 0.15);
+      --shortcut-hover-bg: rgba(0, 0, 0, 0.08);
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
@@ -12,17 +69,58 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: 'Segoe UI', 'PingFang TC', sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-      background-size: 300% 300%;
-      animation: bgShift 8s ease infinite;
-      overflow: hidden;
+      font-family: 'Outfit', 'Noto Sans TC', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      overflow-x: hidden;
+      position: relative;
+      transition: background 0.3s ease, color 0.3s ease;
+      padding: 40px 0;
     }
 
-    @keyframes bgShift {
-      0%   { background-position: 0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    /* Ambient glowing blobs */
+    .glow-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      z-index: 0;
+      opacity: var(--glow-opacity);
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .blob1 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, #764ba2 0%, rgba(102, 126, 234, 0) 70%);
+      top: -10%;
+      left: -10%;
+      animation: float-slow 18s ease-in-out infinite alternate;
+    }
+    .blob2 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, #ff6fd8 0%, rgba(56, 19, 194, 0) 70%);
+      bottom: -15%;
+      right: -10%;
+      animation: float-slow 24s ease-in-out infinite alternate-reverse;
+    }
+    .blob3 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, #00e5ff 0%, rgba(0, 229, 255, 0) 70%);
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: pulse-slow 15s ease-in-out infinite alternate;
+    }
+
+    @keyframes float-slow {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(80px, 50px) scale(1.15); }
+    }
+    @keyframes pulse-slow {
+      0% { transform: translate(-50%, -50%) scale(0.9); opacity: calc(var(--glow-opacity) * 0.7); }
+      100% { transform: translate(-50%, -50%) scale(1.1); opacity: var(--glow-opacity); }
     }
 
     /* Floating bubbles */
@@ -31,149 +129,588 @@
       position: absolute;
       bottom: -80px;
       border-radius: 50%;
-      opacity: 0.18;
+      opacity: 0.12;
       animation: rise linear infinite;
-      background: white;
+      background: linear-gradient(135deg, var(--text-color), rgba(255, 255, 255, 0));
+      transition: opacity 0.3s;
+    }
+    [data-theme="light"] .bubble {
+      opacity: 0.04;
     }
     @keyframes rise {
-      to { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+      to { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
     }
 
+    /* Floating Theme Toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      cursor: pointer;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .theme-toggle:hover {
+      transform: scale(1.1) rotate(15deg);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      background: var(--input-hover-bg);
+    }
+    .theme-toggle:active {
+      transform: scale(0.95);
+    }
+
+    /* Glassmorphism Card */
     .card {
       position: relative;
       z-index: 1;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: var(--card-bg);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid var(--card-border);
       border-radius: 28px;
-      padding: 48px 44px 40px;
-      width: min(460px, 92vw);
-      box-shadow: 0 32px 64px rgba(0,0,0,0.25);
-      animation: cardIn 0.7s cubic-bezier(.22,1,.36,1) both;
+      padding: 40px 36px;
+      width: min(520px, 92vw);
+      min-height: 580px; /* Pre-allocates height to prevent layout shift */
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4), 
+                  inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      animation: cardIn 0.8s cubic-bezier(.22,1,.36,1) both;
+      transition: background 0.3s, border 0.3s, box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
     }
     @keyframes cardIn {
-      from { opacity: 0; transform: translateY(40px) scale(0.95); }
+      from { opacity: 0; transform: translateY(30px) scale(0.97); }
       to   { opacity: 1; transform: none; }
     }
 
     h1 {
       text-align: center;
-      color: #fff;
-      font-size: 1.9rem;
+      font-size: 2.1rem;
       font-weight: 800;
       letter-spacing: .02em;
       margin-bottom: 8px;
-      text-shadow: 0 2px 12px rgba(0,0,0,.25);
+      background: var(--title-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 4px 20px rgba(255, 111, 216, 0.08);
+      transition: background 0.3s;
     }
     .subtitle {
       text-align: center;
-      color: rgba(255,255,255,0.8);
-      font-size: 0.9rem;
-      margin-bottom: 36px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 24px;
+      font-weight: 400;
+      transition: color 0.3s;
     }
 
-    .field { margin-bottom: 22px; }
+    /* Tab Switcher */
+    .tabs {
+      display: flex;
+      background: var(--tab-bg);
+      border-radius: 16px;
+      padding: 4px;
+      margin-bottom: 22px;
+      border: 1px solid var(--card-border);
+      position: relative;
+      transition: background 0.3s, border 0.3s;
+    }
+    .tab-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      padding: 12px 6px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 12px;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .tab-btn.active {
+      color: var(--text-color);
+      background: var(--tab-active-bg);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-shadow: 0 0 10px rgba(255,255,255,0.15);
+    }
+    [data-theme="light"] .tab-btn.active {
+      text-shadow: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Switch Custom Toggles (Settings Panel) */
+    .settings-panel {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+    .switch-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 600;
+      user-select: none;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+    .switch-label:hover {
+      color: var(--text-color);
+    }
+    .switch-label input {
+      display: none;
+    }
+    .switch-custom {
+      width: 36px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 99px;
+      position: relative;
+      transition: background 0.3s;
+      border: 1px solid var(--card-border);
+    }
+    [data-theme="light"] .switch-custom {
+      background: rgba(0, 0, 0, 0.08);
+    }
+    .switch-custom::before {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.3s;
+    }
+    .switch-label input:checked + .switch-custom {
+      background: linear-gradient(135deg, #ff6fd8 0%, #3813c2 100%);
+    }
+    [data-theme="light"] .switch-label input:checked + .switch-custom {
+      background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    }
+    .switch-label input:checked + .switch-custom::before {
+      transform: translateX(16px);
+    }
+
+    /* Field Transitions */
+    .field-transition {
+      transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      max-height: 150px;
+      opacity: 1;
+      transform: translateY(0);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .field-transition.collapsed {
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(-15px);
+      margin-bottom: 0;
+      pointer-events: none;
+    }
+
     label {
-      display: block;
-      color: rgba(255,255,255,0.9);
-      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      color: var(--text-color);
+      font-size: 0.88rem;
       font-weight: 600;
       letter-spacing: .06em;
-      text-transform: uppercase;
       margin-bottom: 8px;
+      gap: 6px;
     }
-    label span { margin-right: 6px; }
 
     input[type="date"],
     input[type="number"] {
       width: 100%;
-      padding: 14px 18px;
-      border: 2px solid rgba(255,255,255,0.35);
+      padding: 13px 16px;
+      border: 2px solid var(--input-border);
       border-radius: 14px;
-      background: rgba(255,255,255,0.18);
-      color: #fff;
-      font-size: 1.05rem;
+      background: var(--input-bg);
+      color: var(--text-color);
+      font-family: inherit;
+      font-size: 1.02rem;
       outline: none;
-      transition: border-color .25s, background .25s, transform .15s;
-      appearance: none;
+      transition: all 0.3s ease;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
     }
-    input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
-    input:hover  { background: rgba(255,255,255,0.25); }
-    input:focus  { border-color: #fff; background: rgba(255,255,255,0.3); transform: scale(1.01); }
-    input::placeholder { color: rgba(255,255,255,0.5); }
+    input[type="date"]::-webkit-calendar-picker-indicator { 
+      filter: invert(1) hue-rotate(180deg) brightness(1.2); 
+      cursor: pointer; 
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    [data-theme="light"] input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: none;
+    }
+    input[type="date"]::-webkit-calendar-picker-indicator:hover {
+      opacity: 1;
+    }
+    input:hover { 
+      background: var(--input-hover-bg); 
+      border-color: rgba(255, 255, 255, 0.35);
+    }
+    [data-theme="light"] input:hover {
+      border-color: rgba(0, 0, 0, 0.25);
+    }
+    input:focus { 
+      border-color: var(--input-focus-border); 
+      background: var(--input-hover-bg); 
+      box-shadow: 0 0 15px var(--input-focus-shadow);
+      transform: scale(1.002);
+    }
+    input::placeholder { color: var(--text-muted); opacity: 0.6; }
 
+    /* Shortcuts CAPSULES */
+    .shortcut-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .shortcut-btn {
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-border);
+      border-radius: 8px;
+      padding: 4px 8px;
+      color: var(--text-color);
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .shortcut-btn:hover {
+      background: var(--shortcut-hover-bg);
+      transform: translateY(-1px);
+    }
+    .shortcut-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Button styles */
     .btn {
       width: 100%;
-      padding: 16px;
-      margin-top: 8px;
+      padding: 15px;
+      margin-top: 10px;
       border: none;
       border-radius: 14px;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 700;
       letter-spacing: .04em;
       cursor: pointer;
-      background: linear-gradient(135deg, #ff6fd8, #3813c2);
+      background: var(--btn-primary-bg);
       color: #fff;
-      box-shadow: 0 6px 24px rgba(0,0,0,.3);
-      transition: transform .15s, box-shadow .15s, filter .15s;
+      box-shadow: 0 8px 30px var(--btn-shadow);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      position: relative;
+      overflow: hidden;
     }
-    .btn:hover  { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(0,0,0,.35); filter: brightness(1.1); }
-    .btn:active { transform: scale(0.97); }
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: all 0.6s ease;
+    }
+    .btn:hover::before {
+      left: 100%;
+    }
+    .btn:hover { 
+      transform: translateY(-2px); 
+      box-shadow: 0 12px 35px var(--btn-shadow); 
+      filter: brightness(1.12); 
+    }
+    .btn:active { transform: scale(0.98); }
 
-    /* Result */
+    /* Result Panel & Placeholders */
     .result {
-      margin-top: 30px;
-      background: rgba(255,255,255,0.22);
-      border: 1px solid rgba(255,255,255,0.4);
-      border-radius: 18px;
-      padding: 24px 22px;
+      margin-top: 26px;
+      background: var(--result-bg);
+      border: 1px solid var(--result-border);
+      border-radius: 20px;
+      padding: 22px 20px;
+      transition: all 0.3s ease;
+      box-shadow: inset 0 0 12px rgba(255,255,255,0.02);
+    }
+    .result-placeholder {
       text-align: center;
-      display: none;
+      padding: 24px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .placeholder-icon {
+      font-size: 2.2rem;
+      opacity: 0.65;
+      animation: pulse-slow 3s ease-in-out infinite alternate;
+    }
+    .result-placeholder p {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+
+    .result-content {
       animation: popIn .45s cubic-bezier(.22,1,.36,1) both;
+      text-align: center;
     }
     @keyframes popIn {
-      from { opacity: 0; transform: scale(0.85); }
-      to   { opacity: 1; transform: none; }
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
     }
-    .result.show { display: block; }
+    
     .result-label {
-      color: rgba(255,255,255,0.8);
-      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
       font-weight: 600;
-      letter-spacing: .1em;
-      text-transform: uppercase;
+      letter-spacing: .08em;
       margin-bottom: 8px;
     }
     .result-date {
-      color: #fff;
+      color: var(--text-color);
       font-size: 2.1rem;
       font-weight: 900;
       letter-spacing: .02em;
-      text-shadow: 0 2px 16px rgba(0,0,0,.3);
+      text-shadow: 0 0 25px rgba(255, 111, 216, 0.25);
+    }
+    [data-theme="light"] .result-date {
+      text-shadow: none;
     }
     .result-weekday {
-      margin-top: 6px;
-      color: rgba(255,255,255,0.75);
-      font-size: 1rem;
-      font-weight: 500;
+      margin-top: 4px;
+      color: #ffc5f4;
+      font-size: 1.02rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    [data-theme="light"] .result-weekday {
+      color: #b91c1c;
     }
     .result-diff {
       margin-top: 14px;
       display: flex;
       justify-content: center;
-      gap: 18px;
+      gap: 8px;
       flex-wrap: wrap;
     }
     .badge {
-      background: rgba(255,255,255,0.2);
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-border);
       border-radius: 999px;
-      padding: 5px 16px;
-      color: #fff;
+      padding: 5px 12px;
+      color: var(--text-color);
       font-size: 0.82rem;
       font-weight: 600;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s, background-color 0.2s;
+    }
+    .badge:hover {
+      transform: scale(1.03);
+      background: var(--input-hover-bg);
     }
 
+    /* Live countdown text */
+    .live-countdown {
+      margin-top: 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #ffb703;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: rgba(255, 183, 3, 0.1);
+      padding: 6px 12px;
+      border-radius: 10px;
+    }
+    [data-theme="light"] .live-countdown {
+      color: #b25e00;
+      background: rgba(178, 94, 0, 0.08);
+    }
+
+    /* Ratio bar */
+    .ratio-container {
+      margin-top: 16px;
+      background: rgba(0, 0, 0, 0.15);
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      text-align: left;
+    }
+    [data-theme="light"] .ratio-container {
+      background: rgba(0, 0, 0, 0.03);
+    }
+    .ratio-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .ratio-label-work { color: #00e5ff; }
+    [data-theme="light"] .ratio-label-work { color: #0284c7; }
+    .ratio-label-weekend { color: #ff6fd8; }
+    [data-theme="light"] .ratio-label-weekend { color: #db2777; }
+    .ratio-bar {
+      display: flex;
+      height: 8px;
+      border-radius: 99px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.1);
+    }
+    [data-theme="light"] .ratio-bar {
+      background: rgba(0,0,0,0.06);
+    }
+    .ratio-bar-work {
+      background: #00e5ff;
+      transition: width 0.4s ease;
+    }
+    [data-theme="light"] .ratio-bar-work { background: #0284c7; }
+    .ratio-bar-weekend {
+      background: #ff6fd8;
+      transition: width 0.4s ease;
+    }
+    [data-theme="light"] .ratio-bar-weekend { background: #db2777; }
+
+    /* Time Breakdown Section */
+    .time-breakdown {
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--card-border);
+      text-align: left;
+    }
+    .breakdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .breakdown-item {
+      background: rgba(0, 0, 0, 0.15);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 6px 2px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    [data-theme="light"] .breakdown-item {
+      background: rgba(255, 255, 255, 0.5);
+    }
+    .breakdown-val {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-color);
+      word-break: break-all;
+    }
+    .breakdown-unit {
+      font-size: 0.62rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Age Details Grid */
+    .zodiac-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .zodiac-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 10px;
+      text-align: center;
+    }
+    [data-theme="light"] .zodiac-card {
+      background: rgba(0, 0, 0, 0.02);
+    }
+    .zodiac-emoji { font-size: 1.6rem; margin-bottom: 2px; }
+    .zodiac-name { font-weight: 700; font-size: 0.92rem; }
+    .zodiac-desc { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
+
+    /* Decimal precision ticking age */
+    .decimal-age {
+      font-family: 'Outfit', 'Courier New', Courier, monospace;
+      font-weight: 700;
+      font-size: 1.15rem;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 6px 12px;
+      border-radius: 8px;
+      color: #ffd700;
+      letter-spacing: 0.5px;
+      display: inline-block;
+      margin-top: 8px;
+    }
+    [data-theme="light"] .decimal-age {
+      background: rgba(0, 0, 0, 0.04);
+      color: #b25e00;
+    }
+
+    /* Progress details */
+    .progress-container {
+      margin-top: 16px;
+      text-align: left;
+    }
+    .progress-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .progress-outer {
+      height: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 99px;
+      overflow: hidden;
+      position: relative;
+    }
+    [data-theme="light"] .progress-outer {
+      background: rgba(0, 0, 0, 0.06);
+    }
+    .progress-inner {
+      height: 100%;
+      background: linear-gradient(90deg, #ff6fd8, #00e5ff);
+      border-radius: 99px;
+      transition: width 0.5s ease;
+      width: 0%;
+    }
+    .progress-desc {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      text-align: center;
+    }
+
+    /* Confetti */
     .confetti-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 99; }
     .confetti-piece {
       position: absolute;
@@ -185,132 +722,1392 @@
       0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
       100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
     }
+
+    /* Dynamic Visual Timeline */
+    .timeline-visual {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+      padding: 14px 12px;
+      background: var(--timeline-bg);
+      border-radius: 16px;
+      border: 1px solid var(--card-border);
+      position: relative;
+      overflow: hidden;
+      animation: slideUp 0.4s ease both;
+      text-align: left;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .timeline-dot-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+      width: 85px;
+      text-align: center;
+    }
+    .timeline-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #ff6fd8;
+      border: 2px solid #fff;
+      box-shadow: 0 0 10px rgba(255, 111, 216, 0.8);
+      z-index: 2;
+    }
+    .timeline-dot-wrap.end-dot .timeline-dot {
+      background: #00e5ff;
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
+    }
+    .timeline-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-color);
+      margin-top: 8px;
+      white-space: nowrap;
+    }
+    .timeline-sub {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .timeline-line-wrap {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 -12px;
+    }
+    .timeline-line {
+      height: 4px;
+      background: linear-gradient(90deg, #ff6fd8 0%, #00e5ff 100%);
+      width: 100%;
+      position: absolute;
+      top: 4px;
+      z-index: 1;
+      border-radius: 2px;
+    }
+    .timeline-arrow {
+      position: absolute;
+      top: -4px;
+      font-size: 11px;
+      color: #00e5ff;
+      text-shadow: 0 0 8px rgba(0, 229, 255, 0.8);
+      z-index: 2;
+      transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .timeline-diff-val {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #00e5ff;
+      margin-top: 14px;
+      z-index: 2;
+      background: var(--bg-color);
+      padding: 2px 8px;
+      border-radius: 99px;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    /* History Logs Styling */
+    .history-section {
+      margin-top: 24px;
+      border-top: 1px dashed var(--card-border);
+      padding-top: 16px;
+    }
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      user-select: none;
+      transition: color 0.2s;
+    }
+    .history-header:hover {
+      color: var(--text-color);
+    }
+    .history-arrow {
+      transition: transform 0.3s;
+      font-size: 0.75rem;
+    }
+    .history-arrow.rotated {
+      transform: rotate(180deg);
+    }
+    .history-list {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+      margin-top: 0;
+      text-align: left;
+    }
+    .history-list.show {
+      max-height: 250px;
+      opacity: 1;
+      overflow-y: auto;
+      margin-top: 12px;
+      padding-right: 4px;
+    }
+    .history-list::-webkit-scrollbar {
+      width: 4px;
+    }
+    .history-list::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-thumb);
+      border-radius: 2px;
+    }
+    .history-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    [data-theme="light"] .history-item {
+      background: rgba(0, 0, 0, 0.015);
+    }
+    .history-item:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.07);
+      border-color: var(--input-focus-border);
+    }
+    [data-theme="light"] .history-item:hover {
+      background: rgba(0, 0, 0, 0.035);
+    }
+    .history-item-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+    }
+    .history-item-title {
+      font-weight: 700;
+      color: var(--text-color);
+    }
+    .history-item-result {
+      color: #ff6fd8;
+      font-weight: bold;
+    }
+    [data-theme="light"] .history-item-result {
+      color: #b5179e;
+    }
+    .history-empty {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      padding: 16px 0;
+    }
+    .history-clear-btn {
+      background: transparent;
+      border: none;
+      color: #f87171;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-weight: 600;
+      opacity: 0.85;
+      transition: opacity 0.2s;
+    }
+    .history-clear-btn:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+
+    /* Keyframe micro-pops */
+    @keyframes pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.015); }
+      100% { transform: scale(1); }
+    }
+    .pop-animation {
+      animation: pop 0.2s ease-in-out;
+    }
   </style>
 </head>
 <body>
+
+<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="切換主題">🌙</button>
+
+<div class="glow-blob blob1"></div>
+<div class="glow-blob blob2"></div>
+<div class="glow-blob blob3"></div>
 
 <div class="bubbles" id="bubbles"></div>
 <div class="confetti-wrap" id="confetti"></div>
 
 <div class="card">
   <h1>📅 日期計算器</h1>
-  <p class="subtitle">輸入起始日期與天數，立刻得到訖日！</p>
+  <p class="subtitle" id="subTitle">即時運算，輕鬆掌握天數與訖日！</p>
 
-  <div class="field">
+  <div class="tabs">
+    <button class="tab-btn active" id="tabAdd" onclick="switchMode('add')">⏳ 加減天數</button>
+    <button class="tab-btn" id="tabDiff" onclick="switchMode('diff')">📅 天數相差</button>
+    <button class="tab-btn" id="tabAge" onclick="switchMode('age')">🎂 年齡生命</button>
+  </div>
+
+  <!-- Settings Switch Group -->
+  <div class="settings-panel" id="settingsPanel">
+    <label class="switch-label">
+      <input type="checkbox" id="excludeWeekends" />
+      <span class="switch-custom"></span>
+      排除週末 (六、日)
+    </label>
+    <label class="switch-label">
+      <input type="checkbox" id="includeStartDay" />
+      <span class="switch-custom"></span>
+      包含起始日 (天數+1)
+    </label>
+  </div>
+
+  <!-- Inputs Area -->
+  <div class="field field-transition" id="startDateField">
     <label><span>🗓️</span>起始日期</label>
     <input type="date" id="startDate" />
+    <div class="shortcut-row">
+      <button type="button" class="shortcut-btn" onclick="setDateShortcut('startDate', 'yesterday')">昨天</button>
+      <button type="button" class="shortcut-btn" onclick="setDateShortcut('startDate', 'today')">今天</button>
+      <button type="button" class="shortcut-btn" onclick="setDateShortcut('startDate', 'tomorrow')">明天</button>
+      <button type="button" class="shortcut-btn" onclick="setDateShortcut('startDate', 'yearStart')">年初</button>
+      <button type="button" class="shortcut-btn" onclick="setDateShortcut('startDate', 'yearEnd')">年底</button>
+    </div>
   </div>
 
-  <div class="field">
+  <div class="field field-transition" id="elapsedDaysField">
     <label><span>⏳</span>經過天數（天）</label>
-    <input type="number" id="elapsedDays" placeholder="例如：30" min="0" />
+    <input type="number" id="elapsedDays" placeholder="例如：30，支援負數" />
+    <div class="shortcut-row">
+      <button type="button" class="shortcut-btn" onclick="adjustDays(-365)">-365天</button>
+      <button type="button" class="shortcut-btn" onclick="adjustDays(-30)">-30天</button>
+      <button type="button" class="shortcut-btn" onclick="adjustDays(-7)">-7天</button>
+      <button type="button" class="shortcut-btn" onclick="adjustDays(-1)">-1天</button>
+      <button type="button" class="shortcut-btn" onclick="adjustDays(1)">+1天</button>
+      <button type="button" class="shortcut-btn" onclick="adjustDays(7)">+7天</button>
+      <button type="button" class="shortcut-btn" onclick="adjustDays(30)">+30天</button>
+      <button type="button" class="shortcut-btn" onclick="adjustDays(365)">+365天</button>
+    </div>
   </div>
 
-  <button class="btn" onclick="calculate()">✨ 計算訖日</button>
+  <div class="field field-transition collapsed" id="endDateField">
+    <label><span>🏁</span>結束日期</label>
+    <input type="date" id="endDate" />
+    <div class="shortcut-row">
+      <button type="button" class="shortcut-btn" onclick="setDateShortcut('endDate', 'yesterday')">昨天</button>
+      <button type="button" class="shortcut-btn" onclick="setDateShortcut('endDate', 'today')">今天</button>
+      <button type="button" class="shortcut-btn" onclick="setDateShortcut('endDate', 'tomorrow')">明天</button>
+      <button type="button" class="shortcut-btn" onclick="setDateShortcut('endDate', 'yearStart')">年初</button>
+      <button type="button" class="shortcut-btn" onclick="setDateShortcut('endDate', 'yearEnd')">年底</button>
+    </div>
+  </div>
 
+  <div class="field field-transition collapsed" id="birthdayField">
+    <label><span>🎂</span>出生日期</label>
+    <input type="date" id="birthday" />
+    <div class="shortcut-row">
+      <button type="button" class="shortcut-btn" onclick="setDateShortcut('birthday', 'today')">今天</button>
+      <button type="button" class="shortcut-btn" onclick="setBirthdayDecade('80s')">80 年代</button>
+      <button type="button" class="shortcut-btn" onclick="setBirthdayDecade('90s')">90 年代</button>
+      <button type="button" class="shortcut-btn" onclick="setBirthdayDecade('00s')">00 年代</button>
+    </div>
+  </div>
+
+  <div class="field field-transition collapsed" id="lifeExpectancyField">
+    <label><span>🧬</span>預期壽命（歲）</label>
+    <input type="number" id="lifeExpectancy" value="85" min="1" max="150" placeholder="例如：85" />
+  </div>
+
+  <button class="btn" id="actionBtn" onclick="handleAction()">📋 複製訖日</button>
+
+  <!-- Output Area (Layout shift resolved) -->
   <div class="result" id="result">
-    <div class="result-label">📌 訖日（End Date）</div>
-    <div class="result-date" id="resultDate">—</div>
-    <div class="result-weekday" id="resultWeekday"></div>
-    <div class="result-diff" id="resultBadges"></div>
+    <!-- Place holder state when inputs are empty -->
+    <div id="resultPlaceholder" class="result-placeholder">
+      <div class="placeholder-icon">📅</div>
+      <p id="placeholderText">請輸入有效日期與天數，將自動呈現精算結果。</p>
+    </div>
+
+    <!-- Main Results (hidden by default) -->
+    <div id="resultContent" class="result-content" style="display: none;">
+      <div class="result-label" id="resultLabel">📌 訖日（End Date）</div>
+      <div class="result-date" id="resultDate">—</div>
+      <div class="result-weekday" id="resultWeekday"></div>
+      
+      <!-- Monospace decimal age (Age mode only) -->
+      <div id="ageDecimalContainer" style="display: none;">
+        <div class="result-label" style="margin-top: 10px;">🧬 精確小數歲數</div>
+        <div class="decimal-age" id="ageDecimalVal">0.000000000</div>
+      </div>
+
+      <!-- Badge list -->
+      <div class="result-diff" id="resultBadges"></div>
+
+      <!-- Live countdown banner -->
+      <div class="live-countdown" id="liveCountdown" style="display: none;">
+        ⏳ 倒數計時：<span id="countdownText">—</span>
+      </div>
+
+      <!-- Ratio distribution bar -->
+      <div class="ratio-container" id="ratioContainer" style="display: none;">
+        <div class="ratio-labels">
+          <span class="ratio-label-work" id="ratioWorkText">💼 工作日: 0 天</span>
+          <span class="ratio-label-weekend" id="ratioWeekendText">🌴 週末假日: 0 天</span>
+        </div>
+        <div class="ratio-bar">
+          <div class="ratio-bar-work" id="ratioBarWork" style="width: 0%;"></div>
+          <div class="ratio-bar-weekend" id="ratioBarWeekend" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- Time breakdown cards -->
+      <div class="time-breakdown" id="timeBreakdown" style="display: none;">
+        <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 6px;">⏱️ 詳細時間換算</div>
+        <div class="breakdown-grid">
+          <div class="breakdown-item">
+            <span class="breakdown-val" id="bdWeeks">—</span>
+            <span class="breakdown-unit">週數</span>
+          </div>
+          <div class="breakdown-item">
+            <span class="breakdown-val" id="bdHours">—</span>
+            <span class="breakdown-unit">小時</span>
+          </div>
+          <div class="breakdown-item">
+            <span class="breakdown-val" id="bdMinutes">—</span>
+            <span class="breakdown-unit">分鐘</span>
+          </div>
+          <div class="breakdown-item">
+            <span class="breakdown-val" id="bdSeconds">—</span>
+            <span class="breakdown-unit">秒數</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Life progress indicator (Age mode only) -->
+      <div class="progress-container" id="lifeProgressContainer" style="display: none;">
+        <div class="progress-label-row">
+          <span>🧬 生命進度條</span>
+          <span id="lifeProgressPercent">0%</span>
+        </div>
+        <div class="progress-outer">
+          <div class="progress-inner" id="lifeProgressBar" style="width: 0%;"></div>
+        </div>
+        <div class="progress-desc" id="lifeProgressDesc">—</div>
+      </div>
+
+      <!-- Zodiacs (Age mode only) -->
+      <div class="zodiac-grid" id="zodiacContainer" style="display: none;">
+        <div class="zodiac-card">
+          <div class="zodiac-emoji" id="zodiacEmoji">🌟</div>
+          <div class="zodiac-name" id="zodiacName">星座</div>
+          <div class="zodiac-desc" id="zodiacDesc">—</div>
+        </div>
+        <div class="zodiac-card">
+          <div class="zodiac-emoji" id="chineseZodiacEmoji">🐲</div>
+          <div class="zodiac-name" id="chineseZodiacName">生肖</div>
+          <div class="zodiac-desc" id="chineseZodiacDesc">—</div>
+        </div>
+      </div>
+      
+      <!-- Timeline visual indicator (Add & Diff modes) -->
+      <div class="timeline-visual" id="timelineVisual" style="display: none;">
+        <div class="timeline-dot-wrap">
+          <div class="timeline-dot"></div>
+          <div class="timeline-label" id="tlStart">—</div>
+          <div class="timeline-sub">起始日</div>
+        </div>
+        <div class="timeline-line-wrap">
+          <div class="timeline-line" id="timelineLine"></div>
+          <div class="timeline-arrow" id="timelineArrow">▶</div>
+          <div class="timeline-diff-val" id="tlDiff">—</div>
+        </div>
+        <div class="timeline-dot-wrap end-dot">
+          <div class="timeline-dot"></div>
+          <div class="timeline-label" id="tlEnd">—</div>
+          <div class="timeline-sub" id="tlEndSub">訖日</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- History Drawer collapsible -->
+  <div class="history-section">
+    <div class="history-header" onclick="toggleHistory()">
+      <span>📜 歷史計算紀錄</span>
+      <span class="history-arrow" id="historyArrow">▼</span>
+    </div>
+    <div class="history-list" id="historyList">
+      <div class="history-empty">尚無歷史計算紀錄</div>
+    </div>
   </div>
 </div>
 
 <script>
-  // Floating bubbles
+  // Setup bubbles
   const bubblesEl = document.getElementById('bubbles');
-  const sizes = [40, 60, 80, 100, 50, 70, 90, 45, 65];
-  sizes.forEach((s, i) => {
+  const sizes = [30, 50, 70, 90, 40, 60, 80, 45, 65];
+  sizes.forEach((s) => {
     const b = document.createElement('div');
     b.className = 'bubble';
-    b.style.cssText = `width:${s}px;height:${s}px;left:${Math.random()*100}%;animation-duration:${6+Math.random()*10}s;animation-delay:${Math.random()*8}s`;
+    b.style.cssText = `width:${s}px;height:${s}px;left:${Math.random()*100}%;animation-duration:${8+Math.random()*10}s;animation-delay:${Math.random()*8}s`;
     bubblesEl.appendChild(b);
   });
 
   const weekdays = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+  let activeMode = 'add';
+  let lastValHash = ''; 
+  let tickingInterval = null; 
 
-  function calculate() {
-    const startVal = document.getElementById('startDate').value;
-    const daysVal  = document.getElementById('elapsedDays').value;
-
-    if (!startVal) { shake('startDate'); return; }
-    if (daysVal === '' || isNaN(daysVal) || Number(daysVal) < 0) { shake('elapsedDays'); return; }
-
-    const start   = new Date(startVal + 'T00:00:00');
-    const days    = parseInt(daysVal, 10);
-    const end     = new Date(start);
-    end.setDate(end.getDate() + days);
-
-    const y = end.getFullYear();
-    const m = String(end.getMonth()+1).padStart(2,'0');
-    const d = String(end.getDate()).padStart(2,'0');
-
-    document.getElementById('resultDate').textContent = `${y} / ${m} / ${d}`;
-    document.getElementById('resultWeekday').textContent = weekdays[end.getDay()];
-
-    const weeks = Math.floor(days / 7);
-    const rem   = days % 7;
-    let badges = `<span class="badge">🗓️ 共 ${days} 天</span>`;
-    if (weeks > 0) badges += `<span class="badge">📆 ${weeks} 週 ${rem > 0 ? rem + ' 天' : ''}</span>`;
-
-    const months = monthDiff(start, end);
-    if (months > 0) badges += `<span class="badge">🌙 約 ${months} 個月</span>`;
-
-    document.getElementById('resultBadges').innerHTML = badges;
-
-    const res = document.getElementById('result');
-    res.classList.remove('show');
-    void res.offsetWidth; // reflow
-    res.classList.add('show');
-
-    launchConfetti();
+  function toLocalISODate(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
   }
 
-  function monthDiff(a, b) {
-    return (b.getFullYear() - a.getFullYear()) * 12 + (b.getMonth() - a.getMonth());
-  }
+  // Auto-fill dates
+  const today = new Date();
+  const todayISO = toLocalISODate(today);
+  document.getElementById('startDate').value = todayISO;
+  
+  const defaultEnd = new Date(today);
+  defaultEnd.setDate(defaultEnd.getDate() + 30);
+  document.getElementById('endDate').value = toLocalISODate(defaultEnd);
+  document.getElementById('elapsedDays').value = 30;
 
-  function shake(id) {
+  // Set default birthday to 1995-06-15 for visual demonstration on age tab
+  const defaultBirthday = new Date(1995, 5, 15);
+  document.getElementById('birthday').value = toLocalISODate(defaultBirthday);
+
+  // Set up listeners for real-time calculations
+  const inputs = ['startDate', 'elapsedDays', 'endDate', 'birthday', 'lifeExpectancy'];
+  inputs.forEach(id => {
     const el = document.getElementById(id);
-    el.style.animation = 'none';
-    el.style.borderColor = '#ff6b6b';
-    el.style.transform = 'translateX(-6px)';
-    setTimeout(() => el.style.transform = 'translateX(6px)', 80);
-    setTimeout(() => el.style.transform = 'translateX(-4px)', 160);
-    setTimeout(() => el.style.transform = 'translateX(4px)', 240);
-    setTimeout(() => { el.style.transform = ''; el.style.borderColor = ''; }, 320);
-    el.focus();
+    if (el) {
+      el.addEventListener('input', () => runCalc());
+      el.addEventListener('change', () => runCalc());
+    }
+  });
+
+  const settingsInputs = ['excludeWeekends', 'includeStartDay'];
+  settingsInputs.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('change', () => runCalc());
+    }
+  });
+
+  // Render initial history and run first calculation
+  renderHistory();
+  runCalc();
+
+  function switchMode(mode) {
+    if (activeMode === mode) return;
+    activeMode = mode;
+    
+    // UI elements
+    const tabAdd = document.getElementById('tabAdd');
+    const tabDiff = document.getElementById('tabDiff');
+    const tabAge = document.getElementById('tabAge');
+    
+    const startDateField = document.getElementById('startDateField');
+    const elapsedDaysField = document.getElementById('elapsedDaysField');
+    const endDateField = document.getElementById('endDateField');
+    const birthdayField = document.getElementById('birthdayField');
+    const lifeExpectancyField = document.getElementById('lifeExpectancyField');
+    
+    const settingsPanel = document.getElementById('settingsPanel');
+    const actionBtn = document.getElementById('actionBtn');
+    
+    // Reset classes
+    [tabAdd, tabDiff, tabAge].forEach(t => t.classList.remove('active'));
+    [startDateField, elapsedDaysField, endDateField, birthdayField, lifeExpectancyField].forEach(f => f.classList.add('collapsed'));
+    
+    if (mode === 'add') {
+      tabAdd.classList.add('active');
+      startDateField.classList.remove('collapsed');
+      elapsedDaysField.classList.remove('collapsed');
+      settingsPanel.style.display = 'flex';
+      actionBtn.textContent = '📋 複製訖日';
+    } else if (mode === 'diff') {
+      tabDiff.classList.add('active');
+      startDateField.classList.remove('collapsed');
+      endDateField.classList.remove('collapsed');
+      settingsPanel.style.display = 'flex';
+      actionBtn.textContent = '📋 複製天數差';
+    } else {
+      tabAge.classList.add('active');
+      birthdayField.classList.remove('collapsed');
+      lifeExpectancyField.classList.remove('collapsed');
+      settingsPanel.style.display = 'none';
+      actionBtn.textContent = '📋 複製精確年齡';
+    }
+    
+    runCalc();
+  }
+
+  // Custom date math helpers
+  function addWorkdays(start, days, includeStart) {
+    let curr = new Date(start.getTime());
+    let target = Math.abs(days);
+    let step = days >= 0 ? 1 : -1;
+    
+    if (target === 0) return curr;
+    
+    let isFirst = true;
+    while (target > 0) {
+      let day = curr.getDay();
+      let isWorkday = day !== 0 && day !== 6;
+      
+      if (isWorkday) {
+        if (isFirst) {
+          isFirst = false;
+          if (includeStart) {
+            target--;
+          }
+        } else {
+          target--;
+        }
+      } else {
+        if (isFirst) {
+          isFirst = false; // Start day was weekend, doesn't count
+        }
+      }
+      
+      if (target > 0) {
+        curr.setDate(curr.getDate() + step);
+      }
+    }
+    return curr;
+  }
+
+  function getWorkdaysDiff(start, end, includeStart) {
+    let s = new Date(start.getTime());
+    let e = new Date(end.getTime());
+    let isNegative = e < s;
+    
+    if (isNegative) {
+      let temp = s; s = e; e = temp;
+    }
+    
+    let count = 0;
+    let curr = new Date(s.getTime());
+    
+    while (curr < e) {
+      let day = curr.getDay();
+      if (day !== 0 && day !== 6) {
+        count++;
+      }
+      curr.setDate(curr.getDate() + 1);
+    }
+    
+    if (includeStart) {
+      let day = e.getDay();
+      if (day !== 0 && day !== 6) {
+        count++;
+      }
+    }
+    
+    return isNegative ? -count : count;
+  }
+
+  function runCalc() {
+    // Clear any active ticking interval first
+    if (tickingInterval) {
+      clearInterval(tickingInterval);
+      tickingInterval = null;
+    }
+
+    const placeholder = document.getElementById('resultPlaceholder');
+    const content = document.getElementById('resultContent');
+    const timeline = document.getElementById('timelineVisual');
+    const ratioContainer = document.getElementById('ratioContainer');
+    const timeBreakdown = document.getElementById('timeBreakdown');
+    const liveCountdown = document.getElementById('liveCountdown');
+    const lifeProgressContainer = document.getElementById('lifeProgressContainer');
+    const zodiacContainer = document.getElementById('zodiacContainer');
+    const ageDecimalContainer = document.getElementById('ageDecimalContainer');
+
+    // Default hidden panels
+    timeline.style.display = 'none';
+    ratioContainer.style.display = 'none';
+    timeBreakdown.style.display = 'none';
+    liveCountdown.style.display = 'none';
+    lifeProgressContainer.style.display = 'none';
+    zodiacContainer.style.display = 'none';
+    ageDecimalContainer.style.display = 'none';
+
+    const startVal = document.getElementById('startDate').value;
+    const excludeWeekends = document.getElementById('excludeWeekends').checked;
+    const includeStart = document.getElementById('includeStartDay').checked;
+
+    if (activeMode === 'add') {
+      const daysVal = document.getElementById('elapsedDays').value;
+      if (!startVal || daysVal === '' || isNaN(daysVal)) {
+        placeholder.style.display = 'flex';
+        document.getElementById('placeholderText').textContent = '請輸入起始日期與經過天數！';
+        content.style.display = 'none';
+        return;
+      }
+      
+      const start = new Date(startVal + 'T00:00:00');
+      const days = parseInt(daysVal, 10);
+      let end = new Date(start);
+      
+      // Calculate
+      if (excludeWeekends) {
+        end = addWorkdays(start, days, includeStart);
+      } else {
+        if (includeStart) {
+          let offset = days > 0 ? (days - 1) : (days < 0 ? (days + 1) : 0);
+          end.setDate(end.getDate() + offset);
+        } else {
+          end.setDate(end.getDate() + days);
+        }
+      }
+      
+      const endISO = toLocalISODate(end);
+      const endStr = `${end.getFullYear()} / ${String(end.getMonth()+1).padStart(2,'0')} / ${String(end.getDate()).padStart(2,'0')}`;
+      
+      // Silently sync end date
+      document.getElementById('endDate').value = endISO;
+
+      // Update basic fields
+      document.getElementById('resultLabel').textContent = '📌 訖日（End Date）';
+      document.getElementById('resultDate').textContent = endStr;
+      document.getElementById('resultWeekday').textContent = weekdays[end.getDay()];
+      
+      // Badges
+      let badges = `<span class="badge">🗓️ 經過 ${Math.abs(days)} ${excludeWeekends ? '個工作天' : '天'}</span>`;
+      const calendarDiff = Math.round(Math.abs(end.getTime() - start.getTime()) / (1000 * 3600 * 24));
+      if (excludeWeekends) {
+        badges += `<span class="badge">📅 曆天數：${calendarDiff} 天</span>`;
+      }
+      const weeks = Math.floor(calendarDiff / 7);
+      const rem = calendarDiff % 7;
+      if (weeks > 0) badges += `<span class="badge">📆 ${weeks} 週 ${rem > 0 ? rem + ' 天' : ''}</span>`;
+      document.getElementById('resultBadges').innerHTML = badges;
+
+      // Time breakdown
+      renderTimeBreakdown(calendarDiff);
+      
+      // Workday ratio visualizer
+      if (excludeWeekends && calendarDiff > 0) {
+        renderRatioDistribution(start, end);
+      }
+
+      // Visual timeline
+      timeline.style.display = 'flex';
+      updateTimeline(startVal, endISO, days, '訖日');
+
+      // Countdown if in future
+      const now = new Date();
+      if (end > now) {
+        liveCountdown.style.display = 'flex';
+        setupLiveCountdown(end);
+      }
+
+      placeholder.style.display = 'none';
+      content.style.display = 'block';
+
+      // Confetti & local hash tracking
+      const hash = `add|${startVal}|${days}|${excludeWeekends}|${includeStart}`;
+      if (hash !== lastValHash) {
+        lastValHash = hash;
+        launchConfetti();
+      }
+
+    } else if (activeMode === 'diff') {
+      const endVal = document.getElementById('endDate').value;
+      if (!startVal || !endVal) {
+        placeholder.style.display = 'flex';
+        document.getElementById('placeholderText').textContent = '請選擇起始日期與結束日期！';
+        content.style.display = 'none';
+        return;
+      }
+      
+      const start = new Date(startVal + 'T00:00:00');
+      const end = new Date(endVal + 'T00:00:00');
+      let days = 0;
+      
+      // Calculate
+      if (excludeWeekends) {
+        days = getWorkdaysDiff(start, end, includeStart);
+      } else {
+        const timeDiff = end.getTime() - start.getTime();
+        let diffDays = Math.round(timeDiff / (1000 * 3600 * 24));
+        if (includeStart) {
+          diffDays = diffDays >= 0 ? (diffDays + 1) : (diffDays - 1);
+        }
+        days = diffDays;
+      }
+      
+      // Silently sync elapsedDays
+      document.getElementById('elapsedDays').value = days;
+
+      document.getElementById('resultLabel').textContent = '⏳ 相差天數（Duration）';
+      document.getElementById('resultDate').textContent = `${Math.abs(days)} ${excludeWeekends ? '個工作天' : '天'}`;
+      
+      const calendarDiff = Math.round(Math.abs(end.getTime() - start.getTime()) / (1000 * 3600 * 24));
+      const weeks = Math.floor(calendarDiff / 7);
+      const rem = calendarDiff % 7;
+      document.getElementById('resultWeekday').textContent = weeks > 0 ? `${weeks} 週 ${rem > 0 ? rem + ' 天' : ''}` : '少於 1 週';
+
+      // Badges
+      let badges = `<span class="badge">🔔 起：${weekdays[start.getDay()]} | 迄：${weekdays[end.getDay()]}</span>`;
+      if (excludeWeekends) {
+        badges += `<span class="badge">📅 總曆天數：${calendarDiff} 天</span>`;
+      }
+      document.getElementById('resultBadges').innerHTML = badges;
+
+      // Time breakdown
+      renderTimeBreakdown(calendarDiff);
+
+      // Workday ratio visualizer
+      if (excludeWeekends && calendarDiff > 0) {
+        renderRatioDistribution(start, end);
+      }
+
+      // Visual timeline
+      timeline.style.display = 'flex';
+      updateTimeline(startVal, endVal, days, '結束日');
+
+      // Countdown if target end is in future
+      const now = new Date();
+      if (end > now) {
+        liveCountdown.style.display = 'flex';
+        setupLiveCountdown(end);
+      }
+
+      placeholder.style.display = 'none';
+      content.style.display = 'block';
+
+      const hash = `diff|${startVal}|${endVal}|${excludeWeekends}|${includeStart}`;
+      if (hash !== lastValHash) {
+        lastValHash = hash;
+        launchConfetti();
+      }
+
+    } else {
+      // Age mode
+      const birthdayVal = document.getElementById('birthday').value;
+      if (!birthdayVal) {
+        placeholder.style.display = 'flex';
+        document.getElementById('placeholderText').textContent = '請選擇您的出生日期！';
+        content.style.display = 'none';
+        return;
+      }
+
+      const birth = new Date(birthdayVal + 'T00:00:00');
+      const now = new Date();
+
+      if (birth > now) {
+        placeholder.style.display = 'flex';
+        document.getElementById('placeholderText').textContent = '⚠️ 出生日期不能大於今天！';
+        content.style.display = 'none';
+        return;
+      }
+
+      // Calculate Age
+      let ageYears = now.getFullYear() - birth.getFullYear();
+      let ageMonths = now.getMonth() - birth.getMonth();
+      let ageDays = now.getDate() - birth.getDate();
+      if (ageDays < 0) {
+        ageMonths--;
+        let prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+        ageDays += prevMonth.getDate();
+      }
+      if (ageMonths < 0) {
+        ageYears--;
+        ageMonths += 12;
+      }
+
+      // Display age
+      document.getElementById('resultLabel').textContent = '🎂 目前精確年齡';
+      document.getElementById('resultDate').textContent = `${ageYears} 歲 ${ageMonths} 月 ${ageDays} 天`;
+      document.getElementById('resultWeekday').textContent = `出生日是 ${weekdays[birth.getDay()]}`;
+
+      // Badges
+      const totalElapsedDays = Math.floor((now.getTime() - birth.getTime()) / (24*3600*1000));
+      let badges = `<span class="badge">☀️ 已來到世界 ${totalElapsedDays} 天</span>`;
+      const nextYearBday = new Date(now.getFullYear(), birth.getMonth(), birth.getDate(), 0, 0, 0);
+      let targetBday = nextYearBday;
+      if (nextYearBday < now) {
+        targetBday = new Date(now.getFullYear() + 1, birth.getMonth(), birth.getDate(), 0, 0, 0);
+      }
+      const daysToBday = Math.ceil((targetBday.getTime() - now.getTime()) / (24*3600*1000));
+      badges += `<span class="badge">🎁 距離下次生日約 ${daysToBday} 天</span>`;
+      document.getElementById('resultBadges').innerHTML = badges;
+
+      // Zodiac & Chinese Zodiac
+      const zodiac = getZodiac(birth.getMonth() + 1, birth.getDate());
+      const cZodiac = getChineseZodiac(birth.getFullYear());
+
+      zodiacContainer.style.display = 'grid';
+      document.getElementById('zodiacEmoji').textContent = zodiac.emoji.trim().split(' ').pop(); // Just emoji
+      document.getElementById('zodiacName').textContent = zodiac.name;
+      document.getElementById('zodiacDesc').textContent = zodiac.desc;
+      
+      document.getElementById('chineseZodiacEmoji').textContent = cZodiac.emoji;
+      document.getElementById('chineseZodiacName').textContent = cZodiac.name;
+      document.getElementById('chineseZodiacDesc').textContent = cZodiac.desc;
+
+      // Lifespan progress
+      lifeProgressContainer.style.display = 'block';
+      const expect = parseFloat(document.getElementById('lifeExpectancy').value) || 85;
+      const msInYear = 365.2425 * 24 * 3600 * 1000;
+      const decimalAgeVal = (now.getTime() - birth.getTime()) / msInYear;
+      const progressPercent = Math.min(100, Math.max(0, (decimalAgeVal / expect) * 100));
+      
+      document.getElementById('lifeProgressPercent').textContent = `${progressPercent.toFixed(4)}%`;
+      document.getElementById('lifeProgressBar').style.width = `${progressPercent}%`;
+      
+      let progressMsg = '';
+      if (progressPercent < 20) progressMsg = "朝氣蓬勃的黃金童年與青春，世界在您眼前展開！🌟";
+      else if (progressPercent < 40) progressMsg = "正是發光發熱的奮鬥期，把握當下，追逐夢想吧！🔥";
+      else if (progressPercent < 60) progressMsg = "智慧與心靈最豐收的黃金歲月，從容優雅地面對人生。🍂";
+      else if (progressPercent < 80) progressMsg = "品味生活與享受寧靜的豐盛時光，健康快樂是最大財富。🌈";
+      else progressMsg = "歲月如歌，智慧如海，感謝生命中的每一個美好瞬間。✨";
+      document.getElementById('lifeProgressDesc').textContent = progressMsg;
+
+      // Decimal age ticking
+      ageDecimalContainer.style.display = 'block';
+      tickingInterval = setInterval(() => {
+        const tickingNow = new Date();
+        const tickingAge = (tickingNow.getTime() - birth.getTime()) / msInYear;
+        document.getElementById('ageDecimalVal').textContent = tickingAge.toFixed(9);
+        
+        // Update countdown
+        const bdayCountMs = targetBday.getTime() - tickingNow.getTime();
+        if (bdayCountMs > 0) {
+          const cdD = Math.floor(bdayCountMs / (24*3600*1000));
+          const cdH = Math.floor((bdayCountMs % (24*3600*1000)) / (3600*1000));
+          const cdM = Math.floor((bdayCountMs % (3600*1000)) / (60*1000));
+          const cdS = Math.floor((bdayCountMs % (60*1000)) / 1000);
+          document.getElementById('countdownText').textContent = `${cdD}天 ${cdH}時 ${cdM}分 ${cdS}秒`;
+        }
+      }, 50);
+
+      // Show countdown ticking
+      liveCountdown.style.display = 'flex';
+
+      placeholder.style.display = 'none';
+      content.style.display = 'block';
+
+      const hash = `age|${birthdayVal}|${expect}`;
+      if (hash !== lastValHash) {
+        lastValHash = hash;
+        launchConfetti();
+      }
+    }
+  }
+
+  function renderTimeBreakdown(days) {
+    const timeBreakdown = document.getElementById('timeBreakdown');
+    timeBreakdown.style.display = 'block';
+
+    const weeks = (days / 7).toFixed(1);
+    const hours = days * 24;
+    const minutes = hours * 60;
+    const seconds = minutes * 60;
+
+    document.getElementById('bdWeeks').textContent = formatNum(weeks);
+    document.getElementById('bdHours').textContent = formatNum(hours);
+    document.getElementById('bdMinutes').textContent = formatNum(minutes);
+    document.getElementById('bdSeconds').textContent = formatNum(seconds);
+  }
+
+  function renderRatioDistribution(start, end) {
+    const ratioContainer = document.getElementById('ratioContainer');
+    ratioContainer.style.display = 'block';
+
+    let s = new Date(Math.min(start, end));
+    let e = new Date(Math.max(start, end));
+    
+    let workdays = 0;
+    let weekends = 0;
+    let curr = new Date(s.getTime());
+    
+    while (curr <= e) {
+      let d = curr.getDay();
+      if (d === 0 || d === 6) weekends++;
+      else workdays++;
+      curr.setDate(curr.getDate() + 1);
+    }
+
+    const total = workdays + weekends;
+    const workPercent = total > 0 ? Math.round((workdays / total) * 100) : 0;
+    const weekendPercent = total > 0 ? 100 - workPercent : 0;
+
+    document.getElementById('ratioWorkText').textContent = `💼 工作日: ${workdays} 天 (${workPercent}%)`;
+    document.getElementById('ratioWeekendText').textContent = `🌴 週末: ${weekends} 天 (${weekendPercent}%)`;
+    
+    document.getElementById('ratioBarWork').style.width = `${workPercent}%`;
+    document.getElementById('ratioBarWeekend').style.width = `${weekendPercent}%`;
+  }
+
+  function setupLiveCountdown(targetDate) {
+    const liveCountdown = document.getElementById('liveCountdown');
+    const updateCountdown = () => {
+      const now = new Date();
+      const diff = targetDate.getTime() - now.getTime();
+      if (diff <= 0) {
+        liveCountdown.style.display = 'none';
+        if (tickingInterval) clearInterval(tickingInterval);
+        return;
+      }
+      const d = Math.floor(diff / (24*3600*1000));
+      const h = Math.floor((diff % (24*3600*1000)) / (3600*1000));
+      const m = Math.floor((diff % (3600*1000)) / (60*1000));
+      const s = Math.floor((diff % (60*1000)) / 1000);
+      document.getElementById('countdownText').textContent = `${d}天 ${h}時 ${m}分 ${s}秒`;
+    };
+
+    updateCountdown();
+    tickingInterval = setInterval(updateCountdown, 1000);
+  }
+
+  function formatNum(num) {
+    return parseFloat(num).toLocaleString('zh-TW', {maximumFractionDigits: 1});
+  }
+
+  // Quick Adjustment Buttons
+  function adjustDays(amount) {
+    const el = document.getElementById('elapsedDays');
+    let val = parseInt(el.value, 10) || 0;
+    el.value = val + amount;
+    runCalc();
+    
+    el.classList.add('pop-animation');
+    setTimeout(() => el.classList.remove('pop-animation'), 200);
+  }
+
+  function setDateShortcut(id, type) {
+    const el = document.getElementById(id);
+    const now = new Date();
+    let target = new Date();
+    
+    if (type === 'yesterday') {
+      target.setDate(now.getDate() - 1);
+    } else if (type === 'tomorrow') {
+      target.setDate(now.getDate() + 1);
+    } else if (type === 'yearStart') {
+      target = new Date(now.getFullYear(), 0, 1);
+    } else if (type === 'yearEnd') {
+      target = new Date(now.getFullYear(), 11, 31);
+    }
+    
+    el.value = toLocalISODate(target);
+    runCalc();
+    
+    el.classList.add('pop-animation');
+    setTimeout(() => el.classList.remove('pop-animation'), 200);
+  }
+
+  function setBirthdayDecade(decade) {
+    const el = document.getElementById('birthday');
+    let year = 1995;
+    if (decade === '80s') year = 1985;
+    else if (decade === '90s') year = 1995;
+    else if (decade === '00s') year = 2005;
+    
+    const target = new Date(year, 5, 15); // June 15th
+    el.value = toLocalISODate(target);
+    runCalc();
+    
+    el.classList.add('pop-animation');
+    setTimeout(() => el.classList.remove('pop-animation'), 200);
+  }
+
+  // Theme Swapper
+  function toggleTheme() {
+    const html = document.documentElement;
+    const btn = document.getElementById('themeToggle');
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    
+    if (isDark) {
+      html.setAttribute('data-theme', 'light');
+      btn.textContent = '☀️';
+    } else {
+      html.setAttribute('data-theme', 'dark');
+      btn.textContent = '🌙';
+    }
+  }
+
+  // Zodiac & Chinese Zodiac calculators
+  function getZodiac(month, day) {
+    const dates = [20, 19, 21, 20, 21, 22, 23, 23, 23, 24, 23, 22];
+    const signs = [
+      { name: "摩羯座", emoji: " Capricorn ♑", desc: "踏實穩重、負責任且有耐力" },
+      { name: "水瓶座", emoji: "Aquarius ♒", desc: "創意無限、崇尚自由且具遠見" },
+      { name: "雙魚座", emoji: "Pisces ♓", desc: "溫柔體貼、富想像力且浪漫" },
+      { name: "牡羊座", emoji: "Aries ♈", desc: "熱情有活力、勇於接受挑戰" },
+      { name: "金牛座", emoji: "Taurus ♉", desc: "沉穩務實、有耐心且愛好美好" },
+      { name: "雙子座", emoji: "Gemini ♊", desc: "機智敏捷、求知慾強且善於溝通" },
+      { name: "巨蟹座", emoji: "Cancer ♋", desc: "重感情、細心貼心且極具包容" },
+      { name: "獅子座", emoji: "Leo ♌", desc: "熱情大方、自信耀眼且有領袖氣質" },
+      { name: "處女座", emoji: "Virgo ♍", desc: "細心嚴謹、追求完美且擅長分析" },
+      { name: "天秤座", emoji: "Libra ♎", desc: "優雅和諧、重視公平且具美感" },
+      { name: "天蠍座", emoji: "Scorpio ♏", desc: "專注執著、神秘深沉且直覺敏銳" },
+      { name: "射手座", emoji: "Sagittarius ♐", desc: "樂觀開朗、熱愛冒險且追求自由" }
+    ];
+    return day < dates[month - 1] ? signs[month - 1] : signs[month % 12];
+  }
+
+  function getChineseZodiac(year) {
+    const animals = [
+      { name: "鼠", emoji: "🐭", desc: "聰明伶俐、隨機應變能力強" },
+      { name: "牛", emoji: "🐮", desc: "勤奮踏實、做事有條不紊" },
+      { name: "虎", emoji: "🐯", desc: "勇猛果敢、充滿開拓精神" },
+      { name: "兔", emoji: "🐰", desc: "溫柔善良、心思細密且謹慎" },
+      { name: "龍", emoji: "🐲", desc: "充滿活力、有領袖智慧與遠大志向" },
+      { name: "蛇", emoji: "🐍", desc: "神秘智慧、直覺敏銳且處事冷靜" },
+      { name: "馬", emoji: "🐴", desc: "熱情奔放、積極主動且崇尚自由" },
+      { name: "羊", emoji: "🐑", desc: "溫和儒雅、富有同情心與創造力" },
+      { name: "猴", emoji: "🐵", desc: "聰明活潑、幽默機智且多才多藝" },
+      { name: "雞", emoji: "🐔", desc: "勤奮守信、注重細節且有遠見" },
+      { name: "狗", emoji: "🐶", desc: "忠誠可靠、正義感強且樂於助人" },
+      { name: "豬", emoji: "🐷", desc: "樂觀豁達、待人誠懇且福氣滿滿" }
+    ];
+    let idx = (year - 1900) % 12;
+    if (idx < 0) idx += 12;
+    return animals[idx];
+  }
+
+  function updateTimeline(startVal, endVal, days, endSubText) {
+    document.getElementById('tlStart').textContent = startVal;
+    document.getElementById('tlEnd').textContent = endVal;
+    document.getElementById('tlEndSub').textContent = endSubText;
+    
+    const arrowEl = document.getElementById('timelineArrow');
+    const diffValEl = document.getElementById('tlDiff');
+    const lineEl = document.getElementById('timelineLine');
+    
+    if (days < 0) {
+      arrowEl.textContent = '◀';
+      arrowEl.style.left = '12%';
+      arrowEl.style.color = '#ff6fd8';
+      arrowEl.style.textShadow = '0 0 10px rgba(255, 111, 216, 0.9)';
+      diffValEl.textContent = `${days} 天`;
+      diffValEl.style.color = '#ff6fd8';
+      lineEl.style.background = 'linear-gradient(90deg, #ff6fd8 0%, #5d1793 100%)';
+    } else if (days > 0) {
+      arrowEl.textContent = '▶';
+      arrowEl.style.left = '84%';
+      arrowEl.style.color = '#00e5ff';
+      arrowEl.style.textShadow = '0 0 10px rgba(0, 229, 255, 0.9)';
+      diffValEl.textContent = `+${days} 天`;
+      diffValEl.style.color = '#00e5ff';
+      lineEl.style.background = 'linear-gradient(90deg, #ff6fd8 0%, #00e5ff 100%)';
+    } else {
+      arrowEl.textContent = '●';
+      arrowEl.style.left = '48%';
+      arrowEl.style.color = '#fff';
+      arrowEl.style.textShadow = '0 0 10px rgba(255, 255, 255, 0.9)';
+      diffValEl.textContent = '同日';
+      diffValEl.style.color = '#fff';
+      lineEl.style.background = 'rgba(255,255,255,0.2)';
+    }
   }
 
   function launchConfetti() {
     const wrap = document.getElementById('confetti');
     wrap.innerHTML = '';
     const colors = ['#ff6fd8','#fff','#ffd700','#00e5ff','#7fffb2','#ff9a3c'];
-    for (let i = 0; i < 70; i++) {
+    for (let i = 0; i < 60; i++) {
       const p = document.createElement('div');
       p.className = 'confetti-piece';
-      const size = 6 + Math.random() * 10;
+      const size = 6 + Math.random() * 8;
       p.style.cssText = `
         left:${Math.random()*100}%;
-        top:${-10 - Math.random()*30}px;
+        top:${-10 - Math.random()*20}px;
         width:${size}px; height:${size}px;
         background:${colors[Math.floor(Math.random()*colors.length)]};
-        animation-duration:${1.2 + Math.random()*1.5}s;
-        animation-delay:${Math.random()*0.6}s;
+        animation-duration:${1.1 + Math.random()*1.3}s;
+        animation-delay:${Math.random()*0.4}s;
         border-radius:${Math.random()>0.5?'50%':'2px'};
       `;
       wrap.appendChild(p);
     }
-    setTimeout(() => wrap.innerHTML = '', 2500);
+    setTimeout(() => wrap.innerHTML = '', 2000);
   }
 
-  // Allow pressing Enter to calculate
-  document.addEventListener('keydown', e => { if (e.key === 'Enter') calculate(); });
+  // History Toggle and Management
+  function toggleHistory() {
+    const listEl = document.getElementById('historyList');
+    const arrowEl = document.getElementById('historyArrow');
+    const isShowing = listEl.classList.contains('show');
+    
+    if (isShowing) {
+      listEl.classList.remove('show');
+      arrowEl.classList.remove('rotated');
+    } else {
+      listEl.classList.add('show');
+      arrowEl.classList.add('rotated');
+      renderHistory();
+    }
+  }
 
-  // Auto-fill today
-  const today = new Date();
-  const iso = today.toISOString().slice(0,10);
-  document.getElementById('startDate').value = iso;
+  function saveToHistory(item) {
+    let history = [];
+    try {
+      history = JSON.parse(localStorage.getItem('date_calc_history')) || [];
+    } catch (e) {
+      history = [];
+    }
+    
+    if (history.length > 0) {
+      const latest = history[0];
+      if (latest.mode === item.mode && 
+          latest.start === item.start && 
+          latest.val === item.val && 
+          latest.end === item.end &&
+          latest.excludeWeekends === item.excludeWeekends &&
+          latest.includeStart === item.includeStart &&
+          latest.birthday === item.birthday) {
+        return; 
+      }
+    }
+    
+    history.unshift(item);
+    if (history.length > 10) history.pop();
+    
+    localStorage.setItem('date_calc_history', JSON.stringify(history));
+    renderHistory();
+  }
+
+  function loadHistoryItem(index) {
+    let history = [];
+    try {
+      history = JSON.parse(localStorage.getItem('date_calc_history')) || [];
+    } catch (e) {
+      return;
+    }
+    const item = history[index];
+    if (!item) return;
+    
+    switchMode(item.mode);
+    
+    if (item.mode === 'add') {
+      document.getElementById('startDate').value = item.start;
+      document.getElementById('elapsedDays').value = item.val;
+      document.getElementById('excludeWeekends').checked = item.excludeWeekends;
+      document.getElementById('includeStartDay').checked = item.includeStart;
+    } else if (item.mode === 'diff') {
+      document.getElementById('startDate').value = item.start;
+      document.getElementById('endDate').value = item.end;
+      document.getElementById('excludeWeekends').checked = item.excludeWeekends;
+      document.getElementById('includeStartDay').checked = item.includeStart;
+    } else if (item.mode === 'age') {
+      document.getElementById('birthday').value = item.birthday;
+      if (item.lifeExpectancy) {
+        document.getElementById('lifeExpectancy').value = item.lifeExpectancy;
+      }
+    }
+    
+    runCalc();
+    
+    const card = document.querySelector('.card');
+    card.classList.add('pop-animation');
+    setTimeout(() => card.classList.remove('pop-animation'), 200);
+  }
+
+  function clearHistory(e) {
+    if (e) e.stopPropagation();
+    if (confirm('確定要清除所有歷史計算紀錄嗎？')) {
+      localStorage.removeItem('date_calc_history');
+      renderHistory();
+    }
+  }
+
+  function renderHistory() {
+    const listEl = document.getElementById('historyList');
+    let history = [];
+    try {
+      history = JSON.parse(localStorage.getItem('date_calc_history')) || [];
+    } catch (e) {
+      history = [];
+    }
+    
+    if (history.length === 0) {
+      listEl.innerHTML = '<div class="history-empty">尚無歷史計算紀錄</div>';
+      return;
+    }
+    
+    let html = '';
+    history.forEach((item, idx) => {
+      let title = '';
+      let details = '';
+      let result = '';
+      
+      const excludeStr = item.excludeWeekends ? ' (無週末)' : '';
+      const includeStartStr = item.includeStart ? ' (含首日)' : '';
+      
+      if (item.mode === 'add') {
+        title = '⏳ 加減天數';
+        details = `${item.start} 調整 ${item.val} 天${excludeStr}${includeStartStr}`;
+        result = item.result;
+      } else if (item.mode === 'diff') {
+        title = '📅 計算天數差';
+        details = `${item.start} 至 ${item.end}${excludeStr}${includeStartStr}`;
+        result = `${item.result}`;
+      } else if (item.mode === 'age') {
+        title = '🎂 年齡生命';
+        details = `生日：${item.birthday}`;
+        result = item.result;
+      }
+      
+      const timeStr = new Date(item.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      
+      html += `
+        <div class="history-item" onclick="loadHistoryItem(${idx})">
+          <div class="history-item-meta">
+            <span>${title}</span>
+            <span>${timeStr}</span>
+          </div>
+          <div class="history-item-title">${details}</div>
+          <div style="font-size: 0.8rem; text-align: right; margin-top: 2px;">
+            結果：<span class="history-item-result">${result}</span>
+          </div>
+        </div>
+      `;
+    });
+    
+    html += `
+      <div style="text-align: right; margin-top: 8px; padding-bottom: 4px;">
+        <button class="history-clear-btn" onclick="clearHistory(event)">🧹 清除全部紀錄</button>
+      </div>
+    `;
+    
+    listEl.innerHTML = html;
+  }
+
+  // Copy with fallback for file:// protocol
+  function handleAction() {
+    let copyText = '';
+    let historyItem = {
+      mode: activeMode,
+      time: Date.now()
+    };
+
+    const startVal = document.getElementById('startDate').value;
+    const excludeWeekends = document.getElementById('excludeWeekends').checked;
+    const includeStart = document.getElementById('includeStartDay').checked;
+
+    if (activeMode === 'add') {
+      const dateText = document.getElementById('resultDate').textContent;
+      const weekdayText = document.getElementById('resultWeekday').textContent;
+      const daysVal = document.getElementById('elapsedDays').value;
+      const excludeStr = excludeWeekends ? ' (已排除週末)' : '';
+      const includeStartStr = includeStart ? ' (包含起始日)' : '';
+      
+      copyText = `以 ${startVal} 為基準，調整 ${daysVal} 天後的計算結果為：${dateText} (${weekdayText})${excludeStr}${includeStartStr}`;
+      
+      historyItem.start = startVal;
+      historyItem.val = daysVal;
+      historyItem.excludeWeekends = excludeWeekends;
+      historyItem.includeStart = includeStart;
+      historyItem.result = `${dateText} (${weekdayText})`;
+
+    } else if (activeMode === 'diff') {
+      const daysText = document.getElementById('resultDate').textContent;
+      const endVal = document.getElementById('endDate').value;
+      const excludeStr = excludeWeekends ? ' (已排除週末)' : '';
+      const includeStartStr = includeStart ? ' (包含起始日)' : '';
+      
+      copyText = `從起始日 ${startVal} 到結束日 ${endVal}，兩者相差共：${daysText}${excludeStr}${includeStartStr}`;
+      
+      historyItem.start = startVal;
+      historyItem.end = endVal;
+      historyItem.excludeWeekends = excludeWeekends;
+      historyItem.includeStart = includeStart;
+      historyItem.result = daysText;
+
+    } else {
+      const bday = document.getElementById('birthday').value;
+      const ageText = document.getElementById('resultDate').textContent;
+      const decAge = document.getElementById('ageDecimalVal').textContent;
+      const expect = document.getElementById('lifeExpectancy').value;
+      
+      copyText = `出生日期為 ${bday}，目前的精確年齡為：${ageText}，精確小數歲數為：${decAge}`;
+      
+      historyItem.birthday = bday;
+      historyItem.lifeExpectancy = expect;
+      historyItem.result = ageText;
+    }
+    
+    // Save to history on copy
+    saveToHistory(historyItem);
+    copyToClipboard(copyText);
+  }
+
+  function copyToClipboard(text) {
+    const btn = document.getElementById('actionBtn');
+    const originalText = btn.innerHTML;
+    
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        showCopySuccess(btn, originalText);
+      }).catch(err => {
+        console.warn('Clipboard API failed, using fallback:', err);
+        fallbackCopy(text, btn, originalText);
+      });
+    } else {
+      fallbackCopy(text, btn, originalText);
+    }
+  }
+
+  function fallbackCopy(text, btn, originalText) {
+    try {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.top = "0";
+      textArea.style.left = "0";
+      textArea.style.position = "fixed";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      const successful = document.execCommand('copy');
+      document.body.removeChild(textArea);
+      if (successful) {
+        showCopySuccess(btn, originalText);
+      } else {
+        throw new Error('execCommand returned false');
+      }
+    } catch (err) {
+      console.error('Fallback copy failed:', err);
+      alert('複製失敗，請手動複製結果！\n\n' + text);
+    }
+  }
+
+  function showCopySuccess(btn, originalText) {
+    btn.innerHTML = '✨ 複製成功！';
+    btn.style.background = 'linear-gradient(135deg, #00e5ff 0%, #3813c2 100%)';
+    btn.style.boxShadow = '0 8px 30px rgba(0, 229, 255, 0.4)';
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.style.background = '';
+      btn.style.boxShadow = '';
+    }, 1800);
+  }
+
+  // Key listening
+  document.addEventListener('keydown', e => { 
+    if (e.key === 'Enter') {
+      runCalc(); 
+      launchConfetti();
+    } 
+  });
 </script>
 </body>
 </html>
